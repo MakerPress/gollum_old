@@ -53,6 +53,24 @@ module Precious
         mustache :create
       end
     end
+    
+    post "/attachment" do
+      name = params[:file][:filename].split(".").first
+
+      wiki_options = settings.wiki_options.merge({:page_class => Gollum::Attachment})
+      wiki = Gollum::Wiki.new(settings.gollum_path, wiki_options)
+
+      format = params[:file][:filename].split(".").last.intern
+
+      begin
+        wiki.write_page("attachments/" + name, format, params[:file][:tempfile], commit_message)
+        redirect "/"
+      rescue Gollum::DuplicatePageError => e
+        @message = "Duplicate page: #{e.message}"
+        mustache :error
+      end
+    end
+
 
     post '/edit/*' do
       wiki = Gollum::Wiki.new(settings.gollum_path, settings.wiki_options)

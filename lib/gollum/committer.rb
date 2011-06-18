@@ -104,7 +104,11 @@ module Gollum
         end
       end
 
-      index.add(fullpath, @wiki.normalize(data))
+      if data.is_a?(Tempfile)
+        index.add(fullpath,data.read)
+      else
+        index.add(fullpath, @wiki.normalize(data))
+      end
     end
 
     # Update the given file in the repository's working directory if there
@@ -171,6 +175,7 @@ module Gollum
     # Returns the Boolean response.
     def page_path_scheduled_for_deletion?(map, path)
       parts = path.split('/')
+
       if parts.size == 1
         deletions = map.keys.select { |k| !map[k] }
         downfile = parts.first.downcase.sub(/\.\w+$/, '')

@@ -1,3 +1,5 @@
+
+
 module Gollum
   class Page
     include Pagination
@@ -390,5 +392,20 @@ module Gollum
 
       find_page_in_tree(map, name, '')
     end
+  end
+end
+
+module Gollum
+  class Attachment < Page
+    include Pagination
+
+    def self.format_to_ext(format)
+      format.to_s
+    end
+
+    def self.cname(name)
+      name
+    end
+
   end
 end
