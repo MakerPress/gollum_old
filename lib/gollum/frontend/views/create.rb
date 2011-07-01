@@ -37,7 +37,7 @@ module Precious
       end
 
       def formats
-        super(:markdown)
+        super(:creole)
       end
     end
   end
